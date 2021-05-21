@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Card from './Card';
-import {useState, useEffect, useHistory} from 'react-router-dom';
+import { useHistory} from 'react-router-dom';
+
+import {db, auth, storage} from '../utils/firebase';
 
 function BestSeller() {
     
@@ -9,33 +11,28 @@ function BestSeller() {
     const navigate = (id) => {
         history.push(`/products/${id}`)
     }
-    const list = [
-        {
-            id : 1,
-            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.tb-XASqylOpmcFLPLiOr9wHaJp%26pid%3DApi&f=1',
-            name: "Sunray Beauty Oil",
-            price: 499.0
-        },
-        {
-            id : 1,
-            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.tb-XASqylOpmcFLPLiOr9wHaJp%26pid%3DApi&f=1',
-            name: "Sunray Beauty Oil",
-            price: 499.0
-        },
-        {
-            id : 1,
-            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.tb-XASqylOpmcFLPLiOr9wHaJp%26pid%3DApi&f=1',
-            name: "Sunray Beauty Oil",
-            price: 499.0
-        },
-        {
-            id : 1,
-            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.tb-XASqylOpmcFLPLiOr9wHaJp%26pid%3DApi&f=1',
-            name: "Sunray Beauty Oil",
-            price: 499.0
-        },
+    const [productList, setproductList] = useState([]);
+
+    useEffect(() => {
+       
         
-    ]
+       
+
+        db.collection('products')
+            .onSnapshot(snap => {
+                let documents = [];
+
+                snap.forEach(doc => {
+                    
+
+                    documents.push({...doc.data(), id: doc.id})
+                })
+
+                setproductList(documents)
+            })
+
+        
+    }, [])
     return (
        
             <div className="mx-24 mt-28">
@@ -45,11 +42,12 @@ function BestSeller() {
 
               <div className="bg-accent h-1px w-28"></div>
 
-                <div className="flex flex-wrap justify-around mt-14 ">
-                    {list.map(item => {
-                        return <Card key={item.id} {...item} navigate={navigate}/>
+              <div className="flex flex-wrap justify-around mt-14 ">
+                    {productList.map(item => {
+                        return <Card key={item.id} admin={false} navigate={navigate}  {...item} />
                     })}
                 </div>
+
                
               
             </div>

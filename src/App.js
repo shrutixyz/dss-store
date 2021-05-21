@@ -8,6 +8,7 @@ import Customize from './components/Customize';
 import AddProduct from './components/admin/AddProduct';
 import ErrorPage from './components/ErrorPage'
 import ViewProduct from './components/admin/ViewProduct'
+import EditProduct from './components/admin/EditProduct';
 
 function App() {
   return (
@@ -39,7 +40,10 @@ function App() {
           <Route path="/admin/view-product">
             <ViewProduct />
           </Route>
-          <Route path="error">
+          <Route path="/admin/edit-product/:productId">
+            <EditProduct />
+          </Route>
+          <Route path="/error">
             <ErrorPage />
           </Route>
 

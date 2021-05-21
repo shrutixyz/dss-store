@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {db, auth, storage} from '../../utils/firebase';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import Navbar from '../Navbar';
 
-function AddProduct() {
+function EditProduct() {
 
     const [user, setuser] = useState(null);
     
     //image file 
     const [file, setfile] = useState(null);
-    const [url, seturl] = useState("")
+    const [url, seturl] = useState("");
+    const [imageUrl, setimageUrl] = useState("")
 
     const history = useHistory();
 
@@ -18,11 +19,24 @@ function AddProduct() {
     const [price, setPrice] = useState(0);
     const [desc, setDesc] = useState("")
 
+    const productId = useParams().productId;
 
-
+    console.log(productId)
     useEffect(() => {
-        console.log(url)
-    }, [url])
+        const dbRef = db.collection('products').doc(`${productId}`);
+
+        dbRef.onSnapshot(doc => {
+            setTitle(doc.data().title)
+            setPrice(doc.data().price)
+            setDesc(doc.data().desc)
+            setimageUrl(doc.data().url)
+        })
+
+       
+    }, [])
+
+
+
     useEffect(() => {
    
 
@@ -66,17 +80,13 @@ function AddProduct() {
 
         
 
-        const newItem = {
-            title : title,
-            price : price,
-            desc : desc
-        }
+       
 
-        const dbRef = db.collection('products');
+        const docRef = db.collection('products').doc(`${productId}`);
 
-        dbRef.add(newItem).then(docRef => {
+        docRef.onSnapshot(doc => {
            
-           const uploadTask = storage.ref(`/images/${docRef.id}`).put(file);
+           const uploadTask = storage.ref(`/images/${productId}`).put(file);
 
            uploadTask.on("state_changed",
            (snapshot) => {
@@ -88,16 +98,19 @@ function AddProduct() {
            () => {
            storage
                .ref("images")
-               .child(`${docRef.id}`)
+               .child(`${productId}`)
                .getDownloadURL()
                .then((url) => {
                   docRef.update({url})
+                  setimageUrl(url)
+                  history.push('/admin/view-product')
+
                })
        })
 
 
 
-        }).catch(error => console.log(error))
+        })
 
        
 
@@ -106,6 +119,7 @@ function AddProduct() {
 
       
     }
+
 
     return (
         <div className="">
@@ -123,6 +137,9 @@ function AddProduct() {
                     Short Description
                 </label>
                 <textarea class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-description" rows="5" placeholder="Enter Product Description....." value={desc} onChange={(e)=>setDesc(e.target.value)}/>
+            </div>
+            <div class="w-full px-3 py-3">
+                <img src={imageUrl} className="w-24   md:w-28 lg-48" alt="" />
             </div>
             <div class="w-full px-3 py-3">
                <input type="file" onChange={handleImageAsFile}/>
@@ -145,4 +162,5 @@ function AddProduct() {
     )
 }
 
-export default AddProduct
+export default EditProduct
+
