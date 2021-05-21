@@ -6,7 +6,11 @@ import BestSeller from './BestSeller';
 
 function Products() {
     
+    const history = useHistory()
 
+    const navigate = () => {
+        history.push('/customize')
+    }
     return (
         <div>
             <Navbar />
@@ -20,7 +24,7 @@ function Products() {
                 </div>
                 
                
-                <button className="bg-midaccent hover:opacity-75  rounded-3xl px-5 ml-8 py-0.5 ">Customize</button>
+                <button className="bg-midaccent hover:opacity-75  rounded-3xl px-5 ml-8 py-0.5 " onClick={navigate}>Customize</button>
 
             </div>
 

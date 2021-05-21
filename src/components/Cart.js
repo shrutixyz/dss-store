@@ -28,7 +28,7 @@ function Cart() {
                     
                     
                     documents.push({...doc.data(), id: doc.id})
-                    t += parseInt(doc.data().price)
+                    t += parseInt(doc.data().qty) * parseInt(doc.data().price)
                 })
 
 
@@ -44,6 +44,15 @@ function Cart() {
     }, [])
 
     
+    const onIncrease = (_id, _price) => {
+        // console.log(_id, _price)
+        setTotal(total +  parseInt(_price))
+    }
+
+    const onDecrease = (_id, _price) => {
+        // console.log(_id, _price)
+        setTotal(total -  parseInt(_price))
+    }
 
    
 
@@ -71,7 +80,7 @@ function Cart() {
                             
                             cartList.map(item => {
 
-                                return <CartItem id={item.data} {...item}/>
+                                return <CartItem id={item.data} onIncrease={onIncrease} onDecrease={onDecrease} {...item}/>
                             })
                         }
 

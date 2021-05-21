@@ -3,26 +3,69 @@ import { SketchPicker } from 'react-color';
 import Checkbox from '@material-ui/core/Checkbox';
 import Navbar from './Navbar'
 import CheckBox from './CheckBox';
-
+import {db, auth, storage} from '../utils/firebase';
 
 function Customize() {
     
+    //price
+    const [price, setprice] = useState(300);
+    const [user, setuser] = useState(null)
+
+    
+    useEffect(() => {
+        auth.onAuthStateChanged((_user) => {
+            if(_user) {
+                console.log("user signed in");
+                setuser(_user)
+            }else {
+                console.log("uh,oh")
+            }
+            
+        })
+        
+    }, [])
 
     const OPTIONS = [
         {
             id: 'a',
-            name : 'Panda'
+            name : 'Bubblegum'
         },
         {
             id: 'b',
-            name : 'Sloth'
+            name : 'Vanilla'
         },
         {
             id: 'c',
-            name : 'Koala'
+            name : 'Lavender'
+        },
+        {
+            id: 'd',
+            name : 'Lemon'
         },
     
     ]
+
+    const addToCart = (price,title) => {
+       
+
+        // setaddActive(true)
+        
+        const newCartItem = {
+            
+            qty : 1,
+            price: price,
+            title : title,
+            // imageUrl: imageUrl
+        }
+
+        // console.log(newCartItem)
+        db.collection('cart').doc(`${user.email}`).collection('cartItems').add(newCartItem)
+            .then((docRef) => {
+            console.log("Document written")
+        }).catch ((error) => {
+            console.error(error)
+        })
+    }
     // handle checklist
     const [checkList, setcheckList] = useState([]);
 
@@ -58,6 +101,7 @@ function Customize() {
         const insertedElement = !existElement ? [{name, id}, ...checkList] : filteredElement
 
         setcheckList(insertedElement);
+        setprice(checkList.length * 100)
     };
     
     const onTap = () => {
@@ -69,7 +113,8 @@ function Customize() {
 
    
     useEffect(() => {
-        console.log(checkList)
+        setprice(300 + checkList.length * 100)
+        // console.log(checkList)
     }, [checkList])
        
     return (
@@ -77,6 +122,8 @@ function Customize() {
         <div className="max-w-7xl m-auto" onClick={onTap}>
         <Navbar />
         <div className="flex flex-wrap justify-evenly relative">
+
+            
             <div className="">
 
             {
@@ -102,8 +149,9 @@ function Customize() {
 
             
             <div className="">
+            <h1 className="text-gray-500 my-3 font-medium">Customize the colors</h1>
                 <div className="flex my-auto">
-            
+                
                     <button className="rounded-3xl px-6 mx-4 my-6 py-1 bg-lightaccent" onClick={() => setpickacc(!pickacc)}> Choose Primary Color</button>
                     <div style={{backgroundColor : accent}} className="w-10 h-10 my-6 rounded-3xl"> </div>
 
@@ -123,12 +171,23 @@ function Customize() {
 
                 </div>
 
+                <h1 className="text-gray-500 my-3 font-medium">Choose flavors</h1>
                 <div className="flex shadow-md">
                     {OPTIONS.map(data => {
                         return  <CheckBox handleCheckboxChange={handleCheckboxChange} {...data} />
                     })
                 }
+
+               
                    
+                </div>
+
+                <div className="flex my-auto">
+                    
+                    <button className="rounded-3xl px-6 mx-4 my-6 py-1 bg-lightaccent" onClick={()=>addToCart(price, "Custom")}>Add to Cart</button>
+                    <p className="mt-6">Price: Rs.{price}</p>
+                
+
                 </div>
 
             </div>
