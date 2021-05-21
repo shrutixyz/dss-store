@@ -8,13 +8,25 @@ function SingleProductDetail() {
     //user
     const [user, setuser] = useState(null)
 
+    const history = useHistory()
+  
+
+   
+
+    useEffect(() => {
+        auth.onAuthStateChanged(user => {
+            setuser(user)
+            if(!user) {history.push('/')}
+        })
+    }, [user])
+
     //image file 
     const [file, setfile] = useState(null);
 
     const [url, seturl] = useState("");
     const [imageUrl, setimageUrl] = useState("")
 
-    const history = useHistory();
+    // const history = useHistory();
 
     //form inputs
     const [title, setTitle] = useState("");
