@@ -23,7 +23,7 @@ module.exports = {
         "100v": "100vh",
       },
       colors: {
-        accent : '#F2B880',
+        accent : '#D9B4EF',
         midaccent : '#FFD7B0',
         lightaccent : '#FCE8D4',
         black : '#000000',
