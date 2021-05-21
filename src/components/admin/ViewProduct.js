@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {db,storage} from '../../utils/firebase';
+import {db,auth,storage} from '../../utils/firebase';
 import Card from '../../components/Card';
 import Navbar from '../../components/Navbar'
 import {useHistory} from 'react-router-dom';
@@ -17,7 +17,39 @@ function ViewProduct() {
         history.push(`/admin/edit-product/${id}`)
     }
 
+    const [user, setuser] = useState(null)
 
+
+    useEffect(() => {
+   
+
+        auth.onAuthStateChanged(function(user) {
+                if(!user) {history.push('/')}
+                if (user) {
+                setuser(user)
+                const docRef = db.collection('users')
+                .doc(user.email)
+                
+
+            docRef.get().then((docs) => {
+                if(!docs.exists) {history.push('/error')}
+                if(docs.exists) {
+                    const access = docs.data().access;
+                    if(access !== "admin") {
+                        history.push('/error')
+                    }
+                }else {
+                    console.log("No Admin Rights")
+                }
+
+
+            })
+                
+                } 
+            });
+  
+
+}, [user])
 
     useEffect(() => {
        

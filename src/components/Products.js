@@ -1,16 +1,26 @@
-import React from 'react';
-import {useState, useEffect, useHistory} from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import { useHistory} from 'react-router-dom';
 import Navbar from './Navbar';
 import SearchIcon from '@material-ui/icons/Search';
 import BestSeller from './BestSeller';
+import {auth} from '../utils/firebase'
 
 function Products() {
     
     const history = useHistory()
+    const [user, setuser] = useState(null)
 
     const navigate = () => {
         history.push('/customize')
     }
+
+    useEffect(() => {
+        auth.onAuthStateChanged(user => {
+            setuser(user)
+            if(!user) {history.push('/')}
+        })
+    }, [user])
+
     return (
         <div>
             <Navbar />

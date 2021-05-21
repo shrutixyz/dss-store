@@ -26,33 +26,33 @@ function AddProduct() {
     useEffect(() => {
    
 
-            auth.onAuthStateChanged(function(user) {
-                    if (user) {
-                    setuser(user)
-                    const docRef = db.collection('users')
-                    .doc(user.email)
-                    
+        auth.onAuthStateChanged(function(user) {
+                if(!user) {history.push('/')}
+                if (user) {
+                setuser(user)
+                const docRef = db.collection('users')
+                .doc(user.email)
+                
 
-                docRef.get().then((docs) => {
-                    if(docs.exists) {
-                        const access = docs.data().access;
-                        if(access !== "admin") {
-                            history.push('/error')
-                        }
-                    }else {
-                        console.log("No Admin Rights")
+            docRef.get().then((docs) => {
+                if(!docs.exists) {history.push('/error')}
+                if(docs.exists) {
+                    const access = docs.data().access;
+                    if(access !== "admin") {
+                        history.push('/error')
                     }
+                }else {
+                    console.log("No Admin Rights")
+                }
 
 
-                })
-                    
-                    } else {
-                    console.log("No user is signed in.")
-                    }
-                });
-      
+            })
+                
+                } 
+            });
+  
 
-    }, [])
+}, [user])
 
 
     //handle input file upload

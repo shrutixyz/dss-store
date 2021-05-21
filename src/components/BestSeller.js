@@ -37,7 +37,7 @@ function BestSeller() {
        
             <div className="mx-24 mt-28">
                 <h1>
-                    Our Bestsellers
+                    Our Products
                 </h1>
 
               <div className="bg-accent h-1px w-28"></div>

@@ -1,7 +1,9 @@
 import React from 'react'
 import landing from '../assets/landing.png'
+import {useHistory} from 'react-router-dom'
 
 function HomeContent() {
+    const history = useHistory()
     return (
         <div className="lg:ml-48 md:ml-20 md:flex md:justify-between relative">
             
@@ -21,7 +23,7 @@ function HomeContent() {
                 Find your skin’s perfect match. The dos sistas line is skincare for men, skincare for women, skincare for beginners… skincare for everyone.Find your skin’s perfect match. The dos sistas line is skincare for men, skincare for women, skincare for beginners… skincare for everyone.  
                 </p>
 
-                <button className=" mt-12 px-3 py-2 bg-accent text-white rounded-3xl">
+                <button className=" mt-12 px-3 py-2 bg-accent text-white rounded-3xl" onClick={() => history.push('/products')}>
                     Explore more 
                 </button>
         

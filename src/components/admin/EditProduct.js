@@ -21,6 +21,37 @@ function EditProduct() {
 
     const productId = useParams().productId;
 
+    useEffect(() => {
+   
+
+        auth.onAuthStateChanged(function(user) {
+                if(!user) {history.push('/')}
+                if (user) {
+                setuser(user)
+                const docRef = db.collection('users')
+                .doc(user.email)
+                
+
+            docRef.get().then((docs) => {
+                if(!docs.exists) {history.push('/error')}
+                if(docs.exists) {
+                    const access = docs.data().access;
+                    if(access !== "admin") {
+                        history.push('/error')
+                    }
+                }else {
+                    console.log("No Admin Rights")
+                }
+
+
+            })
+                
+                } 
+            });
+  
+
+}, [user])
+
     console.log(productId)
     useEffect(() => {
         const dbRef = db.collection('products').doc(`${productId}`);
