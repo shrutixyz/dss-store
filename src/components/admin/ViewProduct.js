@@ -17,7 +17,7 @@ function ViewProduct() {
         history.push(`/admin/edit-product/${id}`)
     }
 
-    var temp = [];
+
 
     useEffect(() => {
        
@@ -33,6 +33,7 @@ function ViewProduct() {
 
                     documents.push({...doc.data(), id: doc.id})
                 })
+
 
                 setproductList(documents)
             })

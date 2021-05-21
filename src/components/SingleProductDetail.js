@@ -36,7 +36,8 @@ function SingleProductDetail() {
             id: productId,
             qty : 1,
             price: price,
-            title : title
+            title : title,
+            imageUrl: imageUrl
         }
 
         db.collection('cart').doc(`${user.email}`).collection('cartItems').add(newCartItem)
@@ -70,12 +71,7 @@ function SingleProductDetail() {
             setPrice(querySnapshot.data().price)
 
 
-            const imageRef = storage.ref().child(`images/${productId}`)
-                imageRef.getDownloadURL()
-                    .then((url)=> {
-                        setimageUrl(url)
-                        seturl(url)
-                    })
+           setimageUrl(querySnapshot.data().url)
             // querySnapshot.forEach((doc) => {
 
             //     //get image url
