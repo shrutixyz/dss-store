@@ -11,6 +11,9 @@ function Customize() {
     const [price, setprice] = useState(300);
     const [user, setuser] = useState(null)
 
+    //chang btn text
+    const [addActive, setaddActive] = useState(false)
+
     
     useEffect(() => {
         auth.onAuthStateChanged((_user) => {
@@ -48,7 +51,7 @@ function Customize() {
     const addToCart = (price,title) => {
        
 
-        // setaddActive(true)
+        setaddActive(true)
         
         const newCartItem = {
             
@@ -184,7 +187,7 @@ function Customize() {
 
                 <div className="flex my-auto">
                     
-                    <button className="rounded-3xl px-6 mx-4 my-6 py-1 bg-lightaccent" onClick={()=>addToCart(price, "Custom")}>Add to Cart</button>
+                    <button disabled={addActive} className="rounded-3xl px-6 mx-4 my-6 py-1 bg-lightaccent" onClick={()=>addToCart(price, "Custom")}>{addActive ? "Item Added" : "Add to Cart"}</button>
                     <p className="mt-6">Price: Rs.{price}</p>
                 
 
