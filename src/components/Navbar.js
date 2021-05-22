@@ -61,16 +61,18 @@ function Navbar() {
             {
                 mobileNav ? <div className="absolute top-0 right-0 bg-lightaccent">
                      {user ? (
-                <div className=" mt-6">
-                    <Link to="/products" className="block my-10  mx-6">Browse</Link>
-                    <Link to="/cart" className="block my-10 mx-6">My Cart</Link>
-                    <button className="mx-6 block my-10" onClick={()=>handleSignOut()}>Log Out</button>
+                <div className="mt-0">
+                     <p className="mx-6 pointer-events-auto block  bg-yellow-50" onClick={()=>handleSignOut()}>Log Out</p>
+                    <Link to="/products" className="block mx-6">Browse</Link>
+                    <Link to="/cart" className="block  mx-6">My Cart</Link>
+                   
             </div>
 
             ) : (
                 <div className=" mt-6">
+                         <div className="mx-6 cursor-pointer block my-10 bg-yellow-50" onClick={()=>signInWithGoogle()}>Sign In</div>
                         <Link to="/products" className="block my-10 mx-6">Browse</Link>
-                         <button className="mx-6 block my-10" onClick={()=>signInWithGoogle()}>Sign In</button>
+                        
                 </div>
                 
             )}
